@@ -1,0 +1,197 @@
+{
+  "slug": "20261014-081958-not-tired-not-wired-the-new-southern-ritual",
+  "topic": "Not tired. Not wired. The new Southern ritual",
+  "created": "20261014-081958",
+  "template": "template.html",
+  "brand_label": "TEAZY",
+  "tagline": "Brewed for good company",
+  "handle": "@drinkteazy",
+  "canvas": {
+    "w": 1080,
+    "h": 1350,
+    "aspect": "4:5"
+  },
+  "slides": [
+    {
+      "subject_image": null,
+      "bg_url": null,
+      "bg_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/media/slide01.png",
+      "out_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/slides/slide01.png",
+      "cta_pill": "",
+      "cta_soft": "",
+      "microcopy": "",
+      "subtitle": "A modern twist on a timeless tradition: iced tea, brewed for good company.",
+      "kicker": "Not tired. Not wired.",
+      "role": "hook",
+      "topic_tag": "TEAZY Social Iced Tea",
+      "headline": "The new Southern",
+      "hero_word": "ritual",
+      "bg_scene": "deep-bloom",
+      "content": {
+        "type": "chips",
+        "items": [
+          "Born in Georgia",
+          "Inspired by the Tropics",
+          "Made for connection"
+        ]
+      },
+      "index": 1,
+      "bg_seed": 7,
+      "image_prompt": ""
+    },
+    {
+      "subject_image": null,
+      "bg_url": null,
+      "bg_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/media/slide02.png",
+      "out_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/slides/slide02.png",
+      "cta_pill": "",
+      "cta_soft": "",
+      "microcopy": "",
+      "subtitle": "No jolt, no crash. Built for the in-between.",
+      "kicker": "",
+      "role": "body",
+      "topic_tag": "The problem",
+      "headline": "A spark, not a",
+      "hero_word": "jolt",
+      "bg_scene": "far-field",
+      "content": {
+        "type": "dial",
+        "title": "Where Teazy sits",
+        "segments": [
+          "Tired",
+          "Present",
+          "Wired"
+        ],
+        "on": [
+          1
+        ],
+        "left": "no crash",
+        "right": "no jitters"
+      },
+      "index": 2,
+      "bg_seed": 14,
+      "image_prompt": ""
+    },
+    {
+      "subject_image": null,
+      "bg_url": null,
+      "bg_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/media/slide03.png",
+      "out_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/slides/slide03.png",
+      "cta_pill": "",
+      "cta_soft": "",
+      "microcopy": "",
+      "subtitle": "Real ingredients, nothing artificial.",
+      "kicker": "",
+      "role": "body",
+      "topic_tag": "Per 12oz can",
+      "headline": "Three real",
+      "hero_word": "ingredients",
+      "bg_scene": "close-flora",
+      "content": {
+        "type": "stats",
+        "title": "The functional stack",
+        "items": [
+          {
+            "value": "50mg",
+            "label": "natural caffeine"
+          },
+          {
+            "value": "250mg",
+            "label": "Lion's Mane"
+          },
+          {
+            "value": "200mg",
+            "label": "L-Theanine"
+          }
+        ],
+        "note": [
+          "Caffeine from tea + yerba mate. Lion's Mane may promote mental clarity.",
+          "L-Theanine: calm, focused, present."
+        ]
+      },
+      "index": 3,
+      "bg_seed": 21,
+      "image_prompt": ""
+    },
+    {
+      "subject_image": null,
+      "bg_url": null,
+      "bg_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/media/slide04.png",
+      "out_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/slides/slide04.png",
+      "cta_pill": "",
+      "cta_soft": "",
+      "microcopy": "",
+      "subtitle": "4-packs of 12oz cans.",
+      "kicker": "",
+      "role": "body",
+      "topic_tag": "Two flavors",
+      "headline": "Pick your",
+      "hero_word": "porch pour",
+      "bg_scene": "mist",
+      "content": {
+        "type": "chips",
+        "items": [
+          "Peachtree Cruisin' \u00b7 fresh peach + warm ginger \u00b7 fan favorite",
+          "Half & Half \u00b7 iced tea + lemonade"
+        ]
+      },
+      "index": 4,
+      "bg_seed": 28,
+      "image_prompt": ""
+    },
+    {
+      "subject_image": null,
+      "bg_url": null,
+      "bg_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/media/slide05.png",
+      "out_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/slides/slide05.png",
+      "cta_pill": "",
+      "cta_soft": "",
+      "microcopy": "",
+      "subtitle": "Non-intoxicating. No carbonation, no bloat.",
+      "kicker": "",
+      "role": "body",
+      "topic_tag": "What's not in it",
+      "headline": "Still tea.",
+      "hero_word": "Zero",
+      "bg_scene": "dandelion",
+      "content": {
+        "type": "chips",
+        "items": [
+          "Zero THC",
+          "Zero alcohol",
+          "No carbonation"
+        ]
+      },
+      "index": 5,
+      "bg_seed": 35,
+      "image_prompt": ""
+    },
+    {
+      "subject_image": null,
+      "bg_url": null,
+      "bg_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/media/slide06.png",
+      "out_file": "/home/user/carousel_factory/output/02-carousel-studio/runs/20261014-081958-not-tired-not-wired-the-new-southern-ritual/slides/slide06.png",
+      "cta_pill": "Store Locator",
+      "cta_soft": "at theteazy.com",
+      "microcopy": "Follow @drinkteazy for the next pour.",
+      "subtitle": "Be present. Be your best. Be yourself.",
+      "kicker": "",
+      "role": "cta",
+      "topic_tag": "It's Teazy Time!",
+      "headline": "Find a can",
+      "hero_word": "near you",
+      "bg_scene": "amber-meadow",
+      "content": {
+        "type": "chips",
+        "items": [
+          "Peachtree Cruisin'",
+          "Half & Half"
+        ]
+      },
+      "index": 6,
+      "bg_seed": 42,
+      "image_prompt": ""
+    }
+  ],
+  "theme": "midnight"
+}
