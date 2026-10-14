@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <title>Live Carousel 04: CTA</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Free fonts (SIL Open Font License, licences in shared/fonts/). Only the faces a slide uses get downloaded. */
+@font-face {
+  font-family: "Anybody";
+  src: url("assets/fonts/Anybody-Var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 50% 150%;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("assets/fonts/Fraunces-Italic-Var.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: block;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("assets/fonts/JetBrainsMono-Var.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Anton";
+  src: url("assets/fonts/Anton.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --cobalt: #d93a26;
+  --cobalt-hi: #ec5638;
+  --cobalt-deep: #a82a18;
+  --cream: #fff4e2;
+  --orange: #ffc531;
+  --ink: #2b0d08;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  width: 1080px;
+  height: 1350px;
+  overflow: hidden;
+  background: var(--cobalt);
+}
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--cream);
+}
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(130% 90% at 50% 12%, var(--cobalt-hi) 0%, var(--cobalt) 46%, var(--cobalt-deep) 100%);
+}
+.world {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.layer {
+  position: absolute;
+  inset: 0;
+}
+canvas.grid {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1080px;
+  height: 1350px;
+}
+.glow {
+  position: absolute;
+  width: 1100px;
+  height: 1100px;
+  left: -10px;
+  top: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 197, 49, 0.32) 0%, rgba(255, 197, 49, 0) 62%);
+  opacity: 0;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: absolute;
+  left: 72px;
+  right: 72px;
+  top: 50px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 25px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+.topbar .tb-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.topbar .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  display: block;
+}
+.hairline {
+  position: absolute;
+  left: 0;
+  width: 1080px;
+  top: 118px;
+  height: 2px;
+  background: var(--cream);
+  opacity: 0.38;
+  transform-origin: 0 50%;
+}
+
+/* ---------- type ---------- */
+.small {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 420;
+  font-variation-settings: "opsz" 144;
+  font-size: 76px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+}
+.big {
+  font-family: "Anybody", sans-serif;
+  font-weight: 900;
+  line-height: 0.8;
+  text-transform: uppercase;
+  color: var(--cream);
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-end;
+}
+.big .ch {
+  display: block;
+  position: relative;
+  transform-origin: 50% 100%;
+  font-variation-settings: "wdth" var(--w, 70), "wght" 900;
+  text-shadow: 0.03em 0.04em 0 rgba(43, 13, 8, 0.42);
+  will-change: transform;
+}
+.mono {
+  font-family: var(--mono);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- ruler ---------- */
+.ruler {
+  position: absolute;
+  left: 0;
+  top: 1196px;
+  width: 1080px;
+  height: 100px;
+}
+.ruler-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+.ruler-ticks line {
+  stroke: var(--cream);
+  opacity: 0.62;
+}
+.ruler-labels {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  width: 1080px;
+  height: 30px;
+}
+.ruler-label {
+  position: absolute;
+  top: 0;
+  padding-left: 8px;
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--cream);
+  opacity: 0.9;
+  white-space: nowrap;
+}
+.playhead {
+  position: absolute;
+  left: 0;
+  top: -14px;
+  width: 0;
+  height: 100px;
+  will-change: transform;
+}
+.playhead-cap {
+  position: absolute;
+  left: -11px;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  background: var(--orange);
+  border-radius: 4px 4px 11px 11px;
+}
+.playhead-line {
+  position: absolute;
+  left: -1.5px;
+  top: 18px;
+  width: 3px;
+  height: 82px;
+  background: var(--orange);
+}
+.kf {
+  position: absolute;
+  top: 74px;
+  width: 16px;
+  height: 16px;
+  background: var(--cream);
+  border: 3px solid var(--orange);
+  opacity: 0;
+}
+
+/* ---------- ball ---------- */
+.ball-pos {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+.ball-squash {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+}
+.ball-stretch {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #ffe07a 0%, var(--orange) 42%, #e0a100 100%);
+  box-shadow: 10px 14px 0 rgba(43, 13, 8, 0.32);
+}
+.ball-stretch::before {
+  /* peach crease */
+  content: "";
+  position: absolute;
+  left: 46%;
+  top: 6%;
+  width: 22%;
+  height: 70%;
+  border-left: 4px solid rgba(166, 42, 24, 0.45);
+  border-radius: 50%;
+}
+.ball-stretch::after {
+  /* leaf */
+  content: "";
+  position: absolute;
+  left: 52%;
+  top: -18%;
+  width: 42%;
+  height: 26%;
+  background: #4f8a3a;
+  border-radius: 0 100% 0 100%;
+  transform: rotate(-18deg);
+}
+.ball-pos.ghost .ball-stretch::before,
+.ball-pos.ghost .ball-stretch::after {
+  display: none;
+}
+.ball-pos.ghost .ball-stretch {
+  background: none;
+  border: 3px solid var(--cream);
+  box-shadow: none;
+}
+
+/* ---------- particles ---------- */
+.particle {
+  position: absolute;
+  left: -9px;
+  top: -9px;
+  width: 18px;
+  height: 18px;
+  background: var(--cream);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.particle.alt {
+  background: var(--orange);
+}
+
+/* ---------- pills ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 26px;
+  font-family: var(--mono);
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.pill.solid {
+  background: var(--cream);
+  color: var(--ink);
+}
+.pill.line {
+  border: 2px solid rgba(255, 244, 226, 0.7);
+  color: var(--cream);
+}
+
+
+      #small-top {
+        position: absolute;
+        left: 72px;
+        top: 176px;
+      }
+      .wordbox {
+        position: absolute;
+        left: 72px;
+        top: 250px;
+        width: 936px;
+        height: 380px;
+      }
+      .wordbox .big {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 936px;
+        justify-content: center;
+      }
+      .big .ch.slot {
+        flex: none;
+      }
+      #slot-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 6px dashed rgba(255, 244, 226, 0.85);
+      }
+      #small-bot {
+        position: absolute;
+        left: 72px;
+        top: 654px;
+        font-size: 52px;
+        white-space: nowrap;
+      }
+      .row {
+        position: absolute;
+        left: 72px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        opacity: 0;
+      }
+      .row.reply {
+        left: 160px;
+      }
+      .avatar {
+        display: block;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--cream);
+        overflow: hidden;
+        flex: none;
+      }
+      .avatar.ballav {
+        background: radial-gradient(circle at 36% 30%, #ffe07a 0%, var(--orange) 42%, #e0a100 100%);
+      }
+      .row .col {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .row .who {
+        font-family: var(--mono);
+        font-size: 24px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        color: var(--cream);
+        opacity: 0.85;
+      }
+      .row .kw {
+        font-family: "Anybody", sans-serif;
+        font-weight: 900;
+        font-variation-settings: "wdth" 100, "wght" 900;
+        font-size: 46px;
+        line-height: 1;
+        color: var(--cream);
+      }
+      .row .msg {
+        font-family: "Fraunces", Georgia, serif;
+        font-style: italic;
+        font-weight: 420;
+        font-size: 44px;
+        line-height: 1;
+        color: var(--cream);
+      }
+      #heart {
+        position: absolute;
+        right: 72px;
+        width: 52px;
+        height: 48px;
+        overflow: visible;
+      }
+      .bar {
+        position: absolute;
+        left: 72px;
+        top: 960px;
+        width: 936px;
+        height: 104px;
+        border-radius: 52px;
+        border: 3px solid rgba(255, 244, 226, 0.7);
+        background: rgba(43, 13, 8, 0.3);
+        display: flex;
+        align-items: center;
+        padding: 0 20px 0 20px;
+        gap: 22px;
+      }
+      .field {
+        flex: 1;
+        position: relative;
+        height: 60px;
+      }
+      #placeholder {
+        position: absolute;
+        left: 0;
+        top: 6px;
+        font-family: "Fraunces", Georgia, serif;
+        font-style: italic;
+        font-weight: 420;
+        font-size: 42px;
+        line-height: 1;
+        color: var(--cream);
+        opacity: 0.85;
+        white-space: nowrap;
+      }
+      #typed {
+        position: absolute;
+        left: 0;
+        top: 8px;
+        display: flex;
+        align-items: center;
+        font-family: "Anybody", sans-serif;
+        font-weight: 900;
+        font-variation-settings: "wdth" 100, "wght" 900;
+        font-size: 46px;
+        line-height: 1;
+        color: var(--cream);
+        white-space: nowrap;
+      }
+      #caret {
+        display: block;
+        width: 4px;
+        height: 48px;
+        margin-left: 6px;
+        background: var(--orange);
+      }
+      #post {
+        display: flex;
+        align-items: center;
+        height: 68px;
+        padding: 0 30px;
+        border-radius: 34px;
+        background: var(--orange);
+        color: var(--ink);
+        font-family: var(--mono);
+        font-size: 27px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        flex: none;
+      }
+      #cursor {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 46px;
+        height: 58px;
+        overflow: visible;
+      }
+      #ripple {
+        position: absolute;
+        left: -40px;
+        top: -40px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 5px solid var(--cream);
+        opacity: 0;
+      }
+      .triplet {
+        position: absolute;
+        left: 60px;
+        top: 1100px;
+        display: flex;
+        gap: 12px;
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: var(--cream);
+      }
+      .triplet .w {
+        position: relative;
+        display: block;
+        padding: 10px 14px;
+      }
+      .triplet .w .hl {
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        background: var(--cream);
+        opacity: 0;
+      }
+      .triplet .w span {
+        position: relative;
+      }
+      .triplet .sep {
+        display: block;
+        padding: 10px 0;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1350">
+      <div id="scene" class="scene clip" data-start="0" data-duration="8" data-track-index="0">
+        <div id="world" class="world">
+          <canvas id="grid" class="grid" width="1080" height="1350"></canvas>
+          <div id="glow" class="glow"></div>
+
+          <div class="topbar">
+            <div class="tb-left"><span class="dot"></span><span>It’s Teazy time</span></div>
+            <div>04 / 04</div>
+          </div>
+          <div class="hairline"></div>
+
+          <div id="small-top" class="small">comment the word</div>
+          <div id="wordbox" class="wordbox">
+            <div id="w-motion" class="big" data-word="TEAZY."></div>
+          </div>
+          <div id="slot-ring"></div>
+          <div id="small-bot" class="small">& we’ll DM you the store locator.</div>
+
+          <div id="row1" class="row" style="top: 742px">
+            <span class="avatar">
+              <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="25" r="11" fill="#2b0d08" /><path d="M10 60 C 12 42, 52 42, 54 60 Z" fill="#2b0d08" /></svg>
+            </span>
+            <span class="col"><span class="who">YOU · JUST NOW</span><span class="kw">TEAZY</span></span>
+          </div>
+          <svg id="heart" viewBox="0 0 52 48" style="top: 766px">
+            <path id="heartPath" d="M26 44 C 8 31, 3 22, 3 14 C 3 7, 8 3, 14 3 C 19 3, 23 6, 26 10 C 29 6, 33 3, 38 3 C 44 3, 49 7, 49 14 C 49 22, 44 31, 26 44 Z" fill="none" stroke="#fff4e2" stroke-width="4" stroke-linejoin="round" />
+          </svg>
+          <div id="row2" class="row reply" style="top: 848px">
+            <span class="avatar ballav"></span>
+            <span class="col"><span class="who">TEAZY · REPLIED</span><span class="msg">store locator sent. check DMs.</span></span>
+          </div>
+
+          <div class="bar">
+            <span class="avatar">
+              <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="25" r="11" fill="#2b0d08" /><path d="M10 60 C 12 42, 52 42, 54 60 Z" fill="#2b0d08" /></svg>
+            </span>
+            <div class="field">
+              <div id="placeholder">Add a comment…</div>
+              <div id="typed"><span id="typedText"></span><span id="caret"></span></div>
+            </div>
+            <div id="post">POST</div>
+          </div>
+
+          <div class="triplet">
+            <div class="w" id="tw0"><div class="hl"></div><span>SAVE IT</span></div>
+            <div class="sep">·</div>
+            <div class="w" id="tw1"><div class="hl"></div><span>SHARE IT</span></div>
+            <div class="sep">·</div>
+            <div class="w" id="tw2"><div class="hl"></div><span>THETEAZY.COM</span></div>
+          </div>
+
+          <div id="fx" class="layer"></div>
+          <div id="balls" class="layer"></div>
+          <div id="ripple"></div>
+          <svg id="cursor" viewBox="0 0 46 58">
+            <path d="M4 3 L4 46 L15 36 L23 54 L31 50 L23 33 L39 33 Z" fill="#fff4e2" stroke="#2b0d08" stroke-width="3.5" stroke-linejoin="round" />
+          </svg>
+          <div id="ruler" class="ruler"></div>
+        </div>
+        <div
+  id="grain-overlay"
+  style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+  "
+>
+  <div class="grain-texture"></div>
+</div>
+
+<style>
+  @keyframes hf-grain-noise {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    10% {
+      transform: translate(-5%, -5%);
+    }
+    20% {
+      transform: translate(-10%, 5%);
+    }
+    30% {
+      transform: translate(5%, -10%);
+    }
+    40% {
+      transform: translate(-5%, 15%);
+    }
+    50% {
+      transform: translate(-10%, 5%);
+    }
+    60% {
+      transform: translate(15%, 0);
+    }
+    70% {
+      transform: translate(0, 10%);
+    }
+    80% {
+      transform: translate(-15%, 0);
+    }
+    90% {
+      transform: translate(10%, 5%);
+    }
+  }
+
+  #grain-overlay .grain-texture {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.11;
+    animation: hf-grain-noise 0.5s steps(1) infinite;
+  }
+</style>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="8" data-track-index="2" data-volume="1"></audio>
+    </div>
+
+    <script>
+      /* Live Carousel engine: everything is a pure function of time (seek-safe both ways). */
+(function () {
+  const E = {};
+  const TAU = Math.PI * 2;
+
+  E.clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  E.lerp = (a, b, s) => a + (b - a) * s;
+  E.prog = (t, t0, t1) => E.clamp((t - t0) / (t1 - t0));
+  E.easeInOut = (s) => (s < 0.5 ? 4 * s * s * s : 1 - Math.pow(-2 * s + 2, 3) / 2);
+  E.easeOut = (s) => 1 - Math.pow(1 - s, 3);
+  E.easeIn = (s) => s * s * s;
+  E.easeOutQuint = (s) => 1 - Math.pow(1 - s, 5);
+  E.easeOutBack = (s, k = 1.7) => 1 + (k + 1) * Math.pow(s - 1, 3) + k * Math.pow(s - 1, 2);
+  E.hash = (n) => {
+    const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+    return x - Math.floor(x);
+  };
+
+  /* Damped spring impulse: 0 at dt=0, kicks to +1-ish, rings out. */
+  E.kick = (dt, freq = 3, damp = 7) =>
+    dt < 0 ? 0 : Math.exp(-damp * dt) * Math.sin(TAU * freq * dt);
+  /* Damped spring settle: 0 -> 1 with overshoot. */
+  E.settle = (dt, freq = 2.2, damp = 6) =>
+    dt <= 0 ? 0 : 1 - Math.exp(-damp * dt) * Math.cos(TAU * freq * dt);
+  /* Smooth pulse (gaussian) centred at c, width w. */
+  E.pulse = (t, c, w) => Math.exp(-Math.pow((t - c) / w, 2));
+
+  /*
+   * Ball path: waypoints [{t, x, y, h, ease, contact}] where (x, y) is the ball CENTRE.
+   * Segment i -> i+1 is a parabola: x eases (default linear), y = lerp - 4h s(1-s).
+   * contact: {q, dir} marks a surface hit at that waypoint (squash amount).
+   */
+  E.makePath = (pts) => {
+    const at = (t) => {
+      if (t <= pts[0].t) {
+        const p = pts[0];
+        return { x: p.x, y: p.y, vx: 0, vy: 0 };
+      }
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i];
+        const b = pts[i + 1];
+        if (t <= b.t) {
+          const T = b.t - a.t;
+          const s = (t - a.t) / T;
+          const h = b.h || 0;
+          const ez = b.ease || "linear";
+          let sx = s;
+          let dsx = 1;
+          if (ez === "inOut") {
+            sx = E.easeInOut(s);
+            dsx = s < 0.5 ? 12 * s * s : 3 * Math.pow(-2 * s + 2, 2);
+          } else if (ez === "out") {
+            sx = E.easeOut(s);
+            dsx = 3 * Math.pow(1 - s, 2);
+          } else if (ez === "in") {
+            sx = E.easeIn(s);
+            dsx = 3 * s * s;
+          }
+          const x = a.x + (b.x - a.x) * sx;
+          const y = a.y + (b.y - a.y) * sx - 4 * h * s * (1 - s);
+          const vx = ((b.x - a.x) * dsx) / T;
+          const vy = ((b.y - a.y) * dsx - 4 * h * (1 - 2 * s)) / T;
+          return { x, y, vx, vy };
+        }
+      }
+      const p = pts[pts.length - 1];
+      return { x: p.x, y: p.y, vx: 0, vy: 0 };
+    };
+    const contacts = pts.filter((p) => p.contact);
+    return { at, pts, contacts };
+  };
+
+  /*
+   * Ball renderer: pos > squash (origin bottom) > stretch (rotate along velocity).
+   * Returns the deformation state so callers can reuse it.
+   */
+  E.ballState = (path, t, r, opts = {}) => {
+    const p = path.at(t);
+    const speed = Math.hypot(p.vx, p.vy);
+    const kStretch = opts.stretch === undefined ? 1 : opts.stretch;
+    let st = E.clamp((speed / 5200) * kStretch, 0, 0.42 * kStretch);
+    let q = 0;
+    for (const c of path.contacts) {
+      const dt = t - c.t;
+      if (dt > -0.06 && dt < 0.5) {
+        const amt = c.contact.q === undefined ? 0.45 : c.contact.q;
+        // fast squash over ~2 frames, springy recovery
+        const env = dt < 0 ? E.pulse(dt, 0, 0.03) : Math.exp(-dt * 16) * Math.cos(dt * 38);
+        q += amt * env;
+        st *= E.clamp(Math.abs(dt) / 0.09);
+      }
+    }
+    const ang = Math.atan2(p.vy, p.vx);
+    return { x: p.x, y: p.y, vx: p.vx, vy: p.vy, st, q, ang, r };
+  };
+
+  E.applyBall = (els, s) => {
+    // els: {pos, squash, stretch}
+    els.pos.style.transform = `translate(${s.x - s.r}px, ${s.y - s.r}px)`;
+    const sq = 1 + s.q;
+    els.squash.style.transform = `scale(${sq}, ${1 / sq})`;
+    const a = 1 + s.st;
+    els.stretch.style.transform = `rotate(${s.ang}rad) scale(${a}, ${1 / a}) rotate(${-s.ang}rad)`;
+  };
+
+  E.makeBall = (parent, cls, r) => {
+    const pos = document.createElement("div");
+    pos.className = "ball-pos " + (cls || "");
+    pos.style.width = pos.style.height = 2 * r + "px";
+    const squash = document.createElement("div");
+    squash.className = "ball-squash";
+    const stretch = document.createElement("div");
+    stretch.className = "ball-stretch";
+    squash.appendChild(stretch);
+    pos.appendChild(squash);
+    parent.appendChild(pos);
+    return { pos, squash, stretch };
+  };
+
+  /* Dot grid with shockwave ripples, drawn on a canvas. */
+  E.makeGrid = (canvas, opts) => {
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width;
+    const H = canvas.height;
+    const gap = opts.gap || 40;
+    const dots = [];
+    for (let y = gap / 2 + 4; y < H; y += gap) {
+      for (let x = gap / 2 + 4; x < W; x += gap) dots.push([x, y]);
+    }
+    return (t, waves, alive) => {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = opts.color;
+      for (const [x0, y0] of dots) {
+        let dx = 0;
+        let dy = 0;
+        let grow = 0;
+        for (const w of waves) {
+          const dt = t - w.t;
+          if (dt < 0 || dt > 1.6) continue;
+          const ex = x0 - w.x;
+          const ey = y0 - w.y;
+          const d = Math.hypot(ex, ey) || 1;
+          const R = dt * (w.v || 1500);
+          const band = Math.exp(-Math.pow((d - R) / 70, 2)) * Math.exp(-dt * 2.2) * (w.a || 1);
+          dx += (ex / d) * band * 26;
+          dy += (ey / d) * band * 26;
+          grow += band;
+        }
+        // gentle breathing when the scene is alive
+        const br = alive ? alive * 0.6 * Math.sin(t * 3.1 + x0 * 0.013 + y0 * 0.009) : 0;
+        const rad = 2.4 + grow * 3.2 + br;
+        ctx.globalAlpha = E.clamp(0.22 + grow * 0.55, 0, 0.85);
+        ctx.beginPath();
+        ctx.arc(x0 + dx, y0 + dy, Math.max(0.6, rad), 0, TAU);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    };
+  };
+
+  /* Timeline ruler: ticks + frame labels continuing across slides, playhead, keyframe diamonds. */
+  E.makeRuler = (root, opts) => {
+    const { frameStart, frames, width } = opts;
+    const px = width / frames; // px per frame
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", width);
+    svg.setAttribute("height", 100);
+    svg.setAttribute("viewBox", `0 0 ${width} 100`);
+    svg.classList.add("ruler-svg");
+    let ticks = "";
+    for (let f = 0; f <= frames; f++) {
+      const x = f * px;
+      const gf = frameStart + f;
+      const major = gf % 30 === 0;
+      const mid = gf % 10 === 0;
+      const h = major ? 30 : mid ? 18 : 9;
+      ticks += `<line x1="${x.toFixed(2)}" y1="0" x2="${x.toFixed(2)}" y2="${h}" stroke-width="${major ? 3 : 2}" />`;
+    }
+    svg.innerHTML = `<g class="ruler-ticks">${ticks}</g>`;
+    root.appendChild(svg);
+    const labels = document.createElement("div");
+    labels.className = "ruler-labels";
+    for (let f = 0; f <= frames; f++) {
+      const gf = frameStart + f;
+      if (gf % 30 !== 0) continue;
+      const l = document.createElement("div");
+      l.className = "ruler-label";
+      l.style.left = f * px + "px";
+      const sec = gf / 30;
+      l.textContent = String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
+      labels.appendChild(l);
+    }
+    root.appendChild(labels);
+    const head = document.createElement("div");
+    head.className = "playhead";
+    head.innerHTML = '<div class="playhead-cap"></div><div class="playhead-line"></div>';
+    root.appendChild(head);
+    const keys = (opts.keys || []).map((k) => {
+      const d = document.createElement("div");
+      d.className = "kf";
+      d.style.left = (k / opts.duration) * width + "px";
+      root.appendChild(d);
+      return { t: k, el: d };
+    });
+    return (t) => {
+      head.style.transform = `translateX(${(t / opts.duration) * width}px)`;
+      for (const k of keys) {
+        const dt = t - k.t;
+        if (dt < 0) {
+          k.el.style.opacity = 0;
+          k.el.style.transform = "translate(-50%, 0) rotate(45deg) scale(0)";
+        } else {
+          const s = E.settle(dt, 2.6, 7);
+          k.el.style.opacity = 1;
+          k.el.style.transform = `translate(-50%, 0) rotate(45deg) scale(${s})`;
+        }
+      }
+    };
+  };
+
+  /* Deterministic particle burst (diamonds / dots) from a point with gravity. */
+  E.makeBurst = (parent, n, seed, cls) => {
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement("div");
+      d.className = "particle " + (cls || "");
+      if (E.hash(seed + i * 7.3) > 0.55) d.classList.add("alt");
+      parent.appendChild(d);
+      const ang = -Math.PI / 2 + (E.hash(seed + i * 3.1) - 0.5) * Math.PI * 1.7;
+      const spd = 520 + E.hash(seed + i * 5.7) * 900;
+      parts.push({ el: d, ang, spd, rot: (E.hash(seed + i * 9.9) - 0.5) * 900, size: 0.6 + E.hash(seed + i * 1.3) * 0.9 });
+    }
+    return (t, t0, x, y, life = 1.1) => {
+      const dt = t - t0;
+      for (const p of parts) {
+        if (dt < 0 || dt > life) {
+          p.el.style.opacity = 0;
+          continue;
+        }
+        const px = x + Math.cos(p.ang) * p.spd * dt;
+        const py = y + Math.sin(p.ang) * p.spd * dt + 0.5 * 2600 * dt * dt;
+        const o = 1 - Math.pow(dt / life, 2);
+        p.el.style.opacity = o;
+        p.el.style.transform = `translate(${px}px, ${py}px) rotate(${45 + p.rot * dt}deg) scale(${p.size * (1 - 0.4 * dt / life)})`;
+      }
+    };
+  };
+
+  /* ---------- layout helpers (build-time only) ---------- */
+  E.rel = (el, root) => {
+    let x = 0,
+      y = 0,
+      n = el;
+    while (n && n !== root) {
+      x += n.offsetLeft;
+      y += n.offsetTop;
+      n = n.offsetParent;
+    }
+    return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+  };
+
+  E.buildWord = (el) => {
+    const word = el.dataset.word;
+    el.innerHTML = "";
+    return [...word].map((c) => {
+      const s = document.createElement("span");
+      s.className = "ch";
+      s.textContent = c;
+      // intentional-layering markers on the word apply to every glyph
+      for (const attr of ["data-layout-allow-overlap", "data-layout-allow-occlusion"]) {
+        if (el.hasAttribute(attr)) s.setAttribute(attr, "");
+      }
+      const b = document.createElement("i");
+      b.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+      s.appendChild(b);
+      el.appendChild(s);
+      return { el: s, c, base: b };
+    });
+  };
+
+  /* Largest font-size (<= maxF) that fits at wdth >= minW, then tune wdth to fill target exactly. */
+  E.fitWord = (el, chars, target, maxF = 400, minW = 52) => {
+    const setW = (w) => chars.forEach((c) => c.el.style.setProperty("--w", w));
+    let F = maxF;
+    for (; F > 120; F -= 4) {
+      el.style.fontSize = F + "px";
+      setW(minW);
+      if (el.scrollWidth <= target) break;
+    }
+    let lo = minW,
+      hi = 150;
+    for (let i = 0; i < 22; i++) {
+      const mid = (lo + hi) / 2;
+      setW(mid);
+      if (el.scrollWidth > target) hi = mid;
+      else lo = mid;
+    }
+    setW(lo);
+    return { F, w: lo };
+  };
+
+  /* Per-glyph geometry: centre x, cap top, baseline (uses canvas ink metrics). */
+  E.measureWord = (chars, F, root) => {
+    const mc = document.createElement("canvas").getContext("2d");
+    mc.font = `900 ${F}px Anybody`;
+    return chars.map((c) => {
+      const r = E.rel(c.el, root);
+      const b = E.rel(c.base, root);
+      const asc = mc.measureText(c.c).actualBoundingBoxAscent;
+      return { cx: r.x + r.w / 2, top: b.y - asc, base: b.y, w: r.w, left: r.x };
+    });
+  };
+
+  /* Clock tween driving a render(t) function; registers the paused timeline. */
+  E.run = (DUR, render) => {
+    const tl = gsap.timeline({ paused: true });
+    const clock = { t: 0 };
+    tl.fromTo(clock, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+    render(0);
+    window.__timelines["main"] = tl;
+  };
+
+  window.LC = E;
+})();
+
+    </script>
+    <script>
+      (function () {
+        const L = window.LC;
+        const DUR = 8;
+        const R = 44;
+        const root = document.getElementById("root");
+        const TYPE_T0 = 1.45,
+          TYPE_DT = 0.14,
+          PRESS = 3.0;
+
+        function build() {
+          const wEl = document.getElementById("w-motion");
+          const chars = L.buildWord(wEl);
+          const SLOT = chars.length - 1;
+          chars[SLOT].el.classList.add("slot");
+          // condensed letters + an empty round slot for the O (as wide as the cap height)
+          const slotEl = chars[SLOT].el;
+          slotEl.textContent = "";
+          slotEl.appendChild(chars[SLOT].base);
+          const mc = document.createElement("canvas").getContext("2d");
+          const W_LET = 60;
+          let F = 420,
+            capH = 0;
+          for (; F > 160; F -= 4) {
+            wEl.style.fontSize = F + "px";
+            chars.forEach((c) => c.el.style.setProperty("--w", W_LET));
+            mc.font = `900 ${F}px Anybody`;
+            capH = mc.measureText("M").actualBoundingBoxAscent;
+            slotEl.style.width = capH + 30 + "px";
+            if (wEl.scrollWidth <= 936) break;
+          }
+          const fit = { F, w: W_LET };
+          const m = L.measureWord(chars, fit.F, root);
+          const wBase = fit.w;
+          const O = { x: m[SLOT].cx, y: m[0].base - capH / 2, r: capH / 2 };
+          const ring = document.getElementById("slot-ring");
+          ring.style.left = O.x - O.r + "px";
+          ring.style.top = O.y - O.r + "px";
+          ring.style.width = ring.style.height = O.r * 2 + "px";
+
+          // ---------- ball: in from top-left, bounce on M, snap into the O slot ----------
+          const KO = O.r / R;
+          const pts = [
+            { t: 0, x: -70, y: 70 },
+            { t: 0.5, x: m[0].cx, y: m[0].top - R, h: 70, contact: { q: 0.5 } },
+            { t: 1.0, x: O.x, y: O.y, h: 150 },
+            { t: 7.1, x: O.x, y: O.y },
+            { t: 7.75, x: 1200, y: 150, h: 160 },
+          ];
+          const path = L.makePath(pts);
+          const balls = document.getElementById("balls");
+          const trail = [3, 2, 1].map((k) => ({ g: L.makeBall(balls, "ghost", R), k }));
+          const ball = L.makeBall(balls, "", R);
+
+          // size of the ball: grows into the O (springy), shrinks back on exit
+          const kAt = (t) => {
+            if (t < 1.0) return 1;
+            if (t < 7.1) return 1 + (KO - 1) * L.settle(t - 1.0, 1.9, 6.5);
+            return 1 + (KO - 1) * (1 - L.easeIn(L.prog(t, 7.1, 7.35)));
+          };
+
+          const typedText = document.getElementById("typedText");
+          const caret = document.getElementById("caret");
+          const placeholder = document.getElementById("placeholder");
+          const post = document.getElementById("post");
+          const cursor = document.getElementById("cursor");
+          const ripple = document.getElementById("ripple");
+          const row1 = document.getElementById("row1");
+          const row2 = document.getElementById("row2");
+          const heart = document.getElementById("heart");
+          const heartPath = document.getElementById("heartPath");
+          const tw = [0, 1, 2].map((i) => document.getElementById("tw" + i));
+          const fx = document.getElementById("fx");
+          const burstO = L.makeBurst(fx, 18, 51);
+          const burstHeart = L.makeBurst(fx, 10, 91);
+          const world = document.getElementById("world");
+          const glow = document.getElementById("glow");
+
+          // post button centre for the cursor
+          const pb = L.rel(post, root);
+          const PX = pb.x + pb.w / 2,
+            PY = pb.y + pb.h / 2;
+          const hb = L.rel(heart, root);
+
+          const grid = L.makeGrid(document.getElementById("grid"), { color: "#fff4e2", gap: 45 });
+          const waves = [
+            { t: 0.5, x: m[0].cx, y: m[0].top, a: 0.6 },
+            { t: 1.0, x: O.x, y: O.y, a: 1.3, v: 1600 },
+            { t: PRESS, x: PX, y: PY, a: 0.9 },
+          ];
+          const ruler = L.makeRuler(document.getElementById("ruler"), {
+            frameStart: 660,
+            frames: 240,
+            width: 1080,
+            duration: DUR,
+            keys: [0.5, 1.0, TYPE_T0, PRESS, 3.6, 7.1],
+          });
+
+          function render(t) {
+            let sx = 0,
+              sy = 0;
+            [
+              [1.0, 9],
+              [PRESS, 5],
+            ].forEach(([t0, amp]) => {
+              const dt = t - t0;
+              if (dt < 0 || dt > 0.5) return;
+              const e = Math.exp(-dt * 10) * amp;
+              sx += Math.sin(dt * 59 + t0) * e;
+              sy += Math.cos(dt * 51 + t0) * e;
+            });
+            world.style.transform = `translate(${sx.toFixed(2)}px, ${sy.toFixed(2)}px)`;
+
+            // ---------- word ----------
+            const alive = L.prog(t, 1.0, 1.4) * (1 - L.prog(t, 6.9, 7.2));
+            const ph = (t - 1.0) / 0.5;
+            chars.forEach((c, i) => {
+              let dip = 0;
+              if (i === 0) dip += 30 * L.kick(t - 0.5, 2.6, 6.5);
+              const snap = L.kick(t - 1.0, 2.3, 6) * (i === SLOT ? 0 : 1 - Math.abs(i - SLOT) * 0.12);
+              dip += 18 * snap;
+              const u = ph - i * 0.12;
+              const bob = -10 * Math.abs(Math.sin(Math.PI * u)) * alive;
+              if (i !== SLOT) c.el.style.setProperty("--w", (wBase + 10 * Math.max(0, snap)).toFixed(2));
+              c.el.style.transform = `translateY(${(dip + bob).toFixed(2)}px)`;
+            });
+
+            // dashed slot ring: visible until the ball fills it, back at the end
+            const ringIn = t < 1.0 ? 1 : t < 7.15 ? 0 : L.prog(t, 7.2, 7.5);
+            const ringPulse = t >= 1.0 && t < 1.5 ? L.prog(t, 1.0, 1.5) : 0;
+            ring.style.opacity = (t < 1.0 ? 1 : t < 1.5 ? 1 - ringPulse : ringIn).toFixed(3);
+            ring.style.transform = `rotate(${(t * 40).toFixed(1)}deg) scale(${(1 + ringPulse * 0.7).toFixed(3)})`;
+
+            // ---------- ball ----------
+            const bs = L.ballState(path, t, R, { stretch: 0.9 });
+            const k = kAt(t);
+            // as the O: squash on every beat, happy hops on Post and on the reply
+            if (t > 1.0 && t < 7.1) {
+              const beatQ = 0.05 * Math.max(0, Math.cos(Math.PI * 2 * ph)) * alive;
+              bs.q += beatQ;
+              [PRESS + 0.1, 3.65].forEach((th) => {
+                const dt = t - th;
+                if (dt > 0 && dt < 0.45) {
+                  const s = dt / 0.45;
+                  bs.y -= 70 * 4 * s * (1 - s);
+                  bs.st = 0.12 * Math.sin(s * Math.PI * 2) * (s < 0.5 ? 1 : 0);
+                }
+                if (dt >= 0.45 && dt < 0.9) bs.q += 0.22 * Math.exp(-(dt - 0.45) * 12) * Math.cos((dt - 0.45) * 30);
+              });
+            }
+            const vis = t <= 7.75;
+            ball.pos.style.opacity = vis ? 1 : 0;
+            L.applyBall(ball, bs);
+            ball.pos.style.transform += ` scale(${k.toFixed(4)})`;
+            ball.stretch.style.boxShadow = `${(10 / k).toFixed(2)}px ${(14 / k).toFixed(2)}px 0 rgba(43, 13, 8, 0.32)`;
+            trail.forEach(({ g, k: kk }) => {
+              const tg = t - kk * 0.045;
+              const gs = L.ballState(path, tg, R, { stretch: 0.9 });
+              const speed = Math.hypot(gs.vx, gs.vy);
+              const moving = tg < 1.0 || tg > 7.1;
+              g.pos.style.opacity = vis && moving ? (L.clamp(speed / 1500) * (0.6 - kk * 0.13)).toFixed(3) : 0;
+              L.applyBall(g, gs);
+              g.pos.style.transform += ` scale(${kAt(tg).toFixed(4)})`;
+            });
+            burstO(t, 1.0, O.x, O.y - O.r * 0.6, 1.0);
+
+            glow.style.opacity = (0.45 * alive + 0.6 * (t > 1.0 ? Math.exp(-(t - 1.0) * 3) : 0)).toFixed(3);
+            glow.style.transform = `translate(${(O.x - 550).toFixed(1)}px, ${(O.y - 550).toFixed(1)}px) scale(0.75)`;
+
+            // ---------- comment bar: type MOTION ----------
+            const word = "TEAZY";
+            const n = Math.max(0, Math.min(word.length, Math.floor((t - TYPE_T0) / TYPE_DT) + 1));
+            const typing = t >= TYPE_T0 && t < PRESS;
+            const shown = typing ? word.slice(0, n) : "";
+            typedText.textContent = shown;
+            placeholder.style.opacity = shown.length || (t >= PRESS && t < 7.0) ? 0 : 0.85;
+            const blink = Math.floor(t / 0.4) % 2 === 0;
+            caret.style.opacity = (typing || t < TYPE_T0 || t > 7.0) && blink ? 1 : 0;
+            caret.style.display = "block";
+            // the caret sits after the placeholder start when empty
+            // POST button press
+            const pk = L.kick(t - PRESS, 2.8, 8);
+            const preHover = L.prog(t, PRESS - 0.25, PRESS - 0.05);
+            const live = n === word.length && t < PRESS + 0.1 ? 1 : 0.65;
+            post.style.opacity = t >= PRESS + 0.1 && t < 7.0 ? 0.65 : live;
+            post.style.transform = `scale(${(1 + 0.04 * preHover * (t < PRESS ? 1 : 0) - 0.12 * Math.max(0, pk) + 0.04 * Math.min(0, pk)).toFixed(4)})`;
+
+            // cursor: glides in, presses, drifts away
+            const cIn = L.easeInOut(L.prog(t, 2.35, PRESS - 0.08));
+            const cOut = L.easeIn(L.prog(t, PRESS + 0.35, PRESS + 0.9));
+            const cx = L.lerp(1150, PX + 4, cIn) + cOut * 260;
+            const cy = L.lerp(1330, PY + 2, cIn) + cOut * 200;
+            const press = t > PRESS - 0.06 && t < PRESS + 0.14 ? 0.86 : 1;
+            cursor.style.opacity = t > 2.3 && t < PRESS + 0.9 ? 1 : 0;
+            cursor.style.transform = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) scale(${press})`;
+            const rp = L.prog(t, PRESS, PRESS + 0.45);
+            ripple.style.opacity = rp > 0 && rp < 1 ? (1 - rp).toFixed(3) : 0;
+            ripple.style.transform = `translate(${PX}px, ${PY}px) scale(${(0.3 + rp * 1.9).toFixed(3)})`;
+
+            // ---------- posted comment + reply ----------
+            const rowIn = (el, t0) => {
+              const pop = L.settle(t - t0, 2.4, 7.5);
+              const out = L.easeIn(L.prog(t, 6.85, 7.2));
+              el.style.opacity = t < t0 ? 0 : (1 - out).toFixed(3);
+              el.style.transform = `translateY(${((1 - pop) * 40 + out * 30).toFixed(2)}px)`;
+            };
+            rowIn(row1, PRESS + 0.06);
+            rowIn(row2, 3.62);
+            const hp = L.settle(t - 4.05, 3, 7);
+            heart.style.opacity = t < PRESS + 0.06 ? 0 : (1 - L.prog(t, 6.85, 7.2)).toFixed(3);
+            heart.style.transform = `scale(${(t < 4.05 ? 1 : 0.6 + 0.4 * hp).toFixed(3)})`;
+            heartPath.setAttribute("fill", t >= 4.05 ? "#ffc531" : "none");
+            heartPath.setAttribute("stroke", t >= 4.05 ? "#ffc531" : "#fff4e2");
+            burstHeart(t, 4.05, hb.x + 26, hb.y + 20, 0.9);
+
+            // ---------- triplet selector on the beats ----------
+            [4.5, 5.0, 5.5].forEach((t0, i) => {
+              const on = L.prog(t, t0, t0 + 0.12) * (1 - L.prog(t, t0 + 0.42, t0 + 0.5));
+              const last = i === 2 ? L.prog(t, 5.5, 5.62) * (1 - L.prog(t, 6.6, 6.9)) : 0;
+              const v = Math.max(on, last);
+              tw[i].firstChild.style.opacity = v.toFixed(3);
+              tw[i].lastChild.style.color = v > 0.5 ? "#2b0d08" : "#fff4e2";
+              tw[i].style.transform = `scale(${(1 + 0.03 * v).toFixed(3)})`;
+            });
+
+            grid(t, waves, 1);
+            ruler(t);
+          }
+
+          const tl = gsap.timeline({ paused: true });
+          const clock = { t: 0 };
+          tl.fromTo(clock, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+          render(0);
+          window.__timelines["main"] = tl;
+        }
+
+        document.fonts.load("900 100px Anybody");
+        document.fonts.load("500 26px 'JetBrains Mono'");
+        document.fonts.load("italic 420 76px Fraunces");
+        document.fonts.ready.then(build);
+      })();
+    </script>
+  </body>
+</html>

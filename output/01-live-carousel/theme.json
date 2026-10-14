@@ -1,0 +1,14 @@
+{
+  "name": "tomato",
+  "about": "Warm and loud: tomato red world, lemon accent, cream type. Food, lifestyle, hot takes.",
+  "colors": {
+    "hero": "#d93a26",
+    "hero-hi": "#ec5638",
+    "hero-deep": "#a82a18",
+    "paper": "#fff4e2",
+    "accent": "#ffc531",
+    "accent-hi": "#ffe07a",
+    "accent-deep": "#e0a100",
+    "ink": "#2b0d08"
+  }
+}
