@@ -1,0 +1,232 @@
+<!doctype html>
+<!--
+  SUN-BLEACHED SURF POSTER — carousel slide template (1080x1350, 4:5).
+
+  The sheet's rules, enforced here:
+    - MUSTARD (#C8BF3C) IS THE ONLY TYPE COLOUR. NO WHITE TYPE, NO BLACK TYPE, EVER.
+      One token, --m. Nothing else is ever used in a `color:` declaration.
+    - MUSTARD NEVER FILLS A BACKGROUND, A BOX OR A BAR — only letters and hairlines.
+    - THE PHOTOGRAPH OWNS EVERY OTHER COLOUR. Only a grade + grain touch it.
+    - SHADOW IS FOR THE SUBJECT'S SILHOUETTE ONLY. There is no text-shadow in this file.
+    - THE SUBJECT STANDS IN FRONT OF THE HEADLINE; THE SCRIPT CROSSES THE HEADLINE.
+      Stack: photo -> big word -> script -> cutout -> everything else.
+    - EVERY PHOTO IS IN MOTION; NOTHING IS SHARP EXCEPT THE TYPE (SVG motion blur).
+    - EVERY SLIDE CARRIES THE META ROW AND THE FOOTER.
+    - BODY COPY STAYS SMALL, CENTRED AND QUIET.
+  Spec: knowledge/style-surf.md
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Pinyon+Script&family=Caveat:wght@500&family=DM+Mono:wght@400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --m:#C8BF3C;                       /* rush mustard: the only type colour */
+    --shadow:#2B2823;                  /* wetsuit shadow: grade only */
+    --mono:'DM Mono', ui-monospace, monospace;
+    --sans:'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+    --display:'Anton', Impact, sans-serif;
+    --script:'Pinyon Script', cursive;
+    --hand:'Caveat', cursive;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1080px;height:1350px;background:var(--shadow)}
+  .stage{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--shadow)}
+
+  /* ---------- the photograph: in motion, sun-bleached, pulled into the dusk ---------- */
+  .photo,.subject{position:absolute;inset:0;width:1080px;height:1350px;object-fit:cover;
+         object-position:var(--pos,50% 50%)}
+  .photo{z-index:1;transform:scale(1.03);filter:url(#mb) sepia(.6) saturate(.9) contrast(.94) brightness(var(--bright,.82))}
+  .subject{z-index:5;pointer-events:none;filter:url(#mbs) sepia(.6) saturate(.9) contrast(.94) brightness(var(--bright,.82))}
+  /* the grade: warm bleach + edge falloff into wetsuit shadow. Part of the photo, not a panel. */
+  .grade{position:absolute;inset:0;z-index:2;pointer-events:none;
+         background:
+           linear-gradient(180deg, rgba(43,40,35,.55) 0, rgba(43,40,35,0) 16%, rgba(43,40,35,0) 58%, rgba(43,40,35,.62) 100%),
+           radial-gradient(130% 90% at 50% 45%, rgba(43,40,35,0) 55%, rgba(43,40,35,.45) 100%)}
+  .warm{position:absolute;inset:0;z-index:2;pointer-events:none;background:rgba(214,168,92,.30);mix-blend-mode:soft-light}
+  .flare{position:absolute;z-index:7;pointer-events:none;border-radius:50%;
+         background:radial-gradient(circle, rgba(241,236,219,.55) 0, rgba(241,236,219,.28) 38%, rgba(241,236,219,0) 70%);
+         mix-blend-mode:screen}
+
+  /* ---------- the headline: big word, crossed by the script, behind the subject ---------- */
+  .word{position:absolute;left:0;top:330px;z-index:3;white-space:nowrap;width:max-content;
+        font-family:var(--display);font-size:380px;line-height:.86;letter-spacing:-.01em;
+        text-transform:uppercase;color:var(--m)}
+  .script{position:absolute;z-index:4;white-space:nowrap;width:max-content;
+        font-family:var(--script);font-size:150px;line-height:1;color:var(--m);transform:rotate(-6deg)}
+  .tag{position:absolute;z-index:6;font-family:var(--mono);font-size:15px;letter-spacing:.14em;
+       text-transform:uppercase;color:var(--m);border:1.5px solid var(--m);border-radius:999px;padding:5px 13px 4px}
+  .sub{position:absolute;left:0;right:0;z-index:6;text-align:center;font-family:var(--hand);font-weight:500;
+       font-size:50px;color:var(--m);transform:rotate(-2deg)}
+
+  /* ---------- meta row + footer: always present ---------- */
+  .meta,.foot{position:absolute;left:56px;right:56px;z-index:6;display:grid;grid-template-columns:1fr auto 1fr;
+       align-items:baseline;font-family:var(--mono);font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:var(--m)}
+  .meta{top:46px} .foot{bottom:44px}
+  .meta span:last-child,.foot span:last-child{text-align:right}
+  .foot .mid{font-weight:400}
+  .credit{position:absolute;left:0;right:0;bottom:18px;z-index:6;text-align:center;font-family:var(--mono);
+       font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--m);opacity:.62}
+
+  /* ---------- body copy: small, centred, quiet ---------- */
+  .body{position:absolute;left:170px;right:170px;z-index:6;text-align:center;font-family:var(--sans);
+       font-weight:400;font-size:25px;line-height:1.36;color:var(--m)}
+  .body b{font-weight:500}
+  .cta{position:absolute;left:0;right:0;z-index:6;text-align:center;color:var(--m)}
+  .cta .p{font-family:var(--mono);font-size:22px;letter-spacing:.22em;text-transform:uppercase}
+  .cta .p span{opacity:.88}
+  .cta .m{font-family:var(--sans);font-size:19px;margin-top:10px;opacity:.85}
+
+  /* ---------- proof: the three-up + row (stats) — letters and hairlines only ---------- */
+  .content{position:absolute;left:70px;right:70px;z-index:6;color:var(--m)}
+  .content .card{background:none;padding:0}
+  .content .ctitle{font-family:var(--mono);font-size:15px;letter-spacing:.2em;text-transform:uppercase;text-align:center;margin-bottom:16px}
+  .content .cnote{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-top:16px;opacity:.8}
+  .content .stats{display:flex;justify-content:center;align-items:center}
+  .content .stat{text-align:center;padding:0 34px;position:relative}
+  .content .stat + .stat::before{content:'';position:absolute;left:-14px;top:50%;width:28px;height:28px;margin-top:-14px;
+       background:linear-gradient(var(--m),var(--m)) center/1.5px 100% no-repeat, linear-gradient(var(--m),var(--m)) center/100% 1.5px no-repeat}
+  .content .stat .v{font-family:var(--display);font-size:78px;line-height:1;letter-spacing:.01em}
+  .content .stat .l{font-family:var(--mono);font-size:15px;letter-spacing:.16em;text-transform:uppercase;margin-top:8px}
+  .content .stat .d{font-family:var(--sans);font-size:14px;margin-top:4px;opacity:.8}
+  .content .chips{display:flex;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:18px;letter-spacing:.14em;text-transform:uppercase}
+  .content .chip + .chip::before{content:'+';padding:0 22px}
+  .content .spark{display:none}
+
+  .grain{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:.20;
+         background-image:var(--grain);background-size:240px 240px;mix-blend-mode:overlay}
+  [data-optional].empty{display:none}
+  .unused{display:none}
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="mb" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur id="mbv" stdDeviation="7 0.6" edgeMode="duplicate"/></filter>
+    <filter id="mbs" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur id="mbsv" stdDeviation="1.6 0"/></filter>
+  </svg>
+  <div class="stage __STAGECLASS__" id="stage">
+    <img class="photo" id="ph" alt="">
+    <div class="grade"></div><div class="warm"></div>
+    <div class="word" id="word">__HEADLINE__</div>
+    <div class="script" id="script" data-optional>__KICKER__</div>
+    <img class="subject" id="sub" alt="">
+
+    <span class="tag" id="tagL" data-optional>__TOPIC_TAG__</span>
+    <span class="tag" id="tagR"></span>
+    <div class="sub" id="subl" data-optional>__SUBTITLE__</div>
+
+    <div class="meta"><span>__META1__</span><span>__HANDLE__</span><span>__META2__</span></div>
+    <div class="content" id="content" data-optional>__CONTENT__</div>
+    <div class="body" id="body" data-optional></div>
+    <div class="cta" id="cta" data-optional><div class="p" data-optional>__CTA_PILL__ <span>__CTA_SOFT__</span></div><div class="m" data-optional>__MICROCOPY__</div></div>
+    <div class="foot"><span id="made"></span><span class="mid">&ldquo;__TAGLINE__&rdquo;</span><span id="folio"></span></div>
+    <div class="credit" data-optional>__META3__</div>
+    __MASCOT__
+    <div class="unused">__HERO_WORD__ __BRAND_LABEL__ __CAPTION__</div>
+    <div class="grain"></div>
+  </div>
+
+  <script>
+  (function(){
+    var S = __SLIDE_JSON__, P = __PLAN_JSON__;
+    var PHOTO = "__BG__", SUBJECT = "__SUBJECT__";
+    var W = 1080, H = 1350, stage = document.getElementById('stage');
+    function num(v, d){ v = parseFloat(v); return isNaN(v) ? d : v; }
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    var idx = parseInt("__INDEX__", 10) || 1, tot = parseInt("__TOTAL__", 10) || 1;
+    function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+    // fixed parts of the system
+    document.getElementById('made').textContent = 'Made by ' + (P.made_by || P.handle || '');
+    document.getElementById('folio').textContent = (S.folio_label || 'No.') + ' ' + pad(idx) + ' of ' + pad(tot);
+    document.getElementById('tagR').textContent = S.tag_right || ('00' + pad(idx));
+    var subl = document.getElementById('subl');
+    if (subl.textContent.trim()) subl.textContent = '*' + subl.textContent.trim() + '*';
+    if (S.caption) document.getElementById('body').innerHTML = esc(S.caption).replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    document.querySelectorAll('[data-optional]').forEach(function(el){
+      if (!el.textContent.trim() && !el.querySelector('img,svg')) el.classList.add('empty');
+    });
+
+    // grade + motion knobs
+    stage.style.setProperty('--bright', num(S.bright, .82));
+    if (S.photo_pos) stage.style.setProperty('--pos', S.photo_pos);
+    document.getElementById('mbv').setAttribute('stdDeviation', num(S.motion, 7) + ' 0.6');
+    document.getElementById('mbsv').setAttribute('stdDeviation', num(S.subject_motion, 1.6) + ' 0');
+
+    // grain, seeded per slide
+    var seed = idx * 7919 + 17;
+    function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+    var gc = document.createElement('canvas'); gc.width = gc.height = 240;
+    var gx = gc.getContext('2d');
+    for (var i = 0; i < 240 * 240 * .5; i++){
+      gx.fillStyle = 'rgba(128,128,128,' + (0.9 * (0.2 + rnd() * .8)).toFixed(3) + ')';
+      gx.beginPath(); gx.arc(rnd() * 240, rnd() * 240, .3 + rnd() * .6, 0, 6.2832); gx.fill();
+    }
+    stage.style.setProperty('--grain', 'url(' + gc.toDataURL() + ')');
+
+    // sun flare (component zoo): soft cream orb
+    if (S.flare !== false){
+      var f = S.flare || {x: 860, y: 250, r: 150};
+      var fl = document.createElement('div'); fl.className = 'flare';
+      fl.style.cssText = 'left:' + (f.x - f.r) + 'px;top:' + (f.y - f.r) + 'px;width:' + 2*f.r + 'px;height:' + 2*f.r + 'px';
+      stage.appendChild(fl);
+    }
+
+    var ph = document.getElementById('ph'), sub = document.getElementById('sub');
+    function loaded(img){ return img.decode ? img.decode().catch(function(){}) : Promise.resolve(); }
+    if (PHOTO) ph.src = PHOTO;
+    if (SUBJECT && S.subject_mode !== 'none') sub.src = SUBJECT; else sub.style.display = 'none';
+
+    Promise.all([document.fonts.ready, PHOTO ? loaded(ph) : 0, SUBJECT ? loaded(sub) : 0]).then(function(){
+      // ---- the big word: fitted to the plate ----
+      var word = document.getElementById('word'), target = W * num(S.head_width, .86), size = 380, mx = num(S.head_max, 460);
+      for (var i = 0; i < 24; i++){
+        var w = word.getBoundingClientRect().width; if (!w) break;
+        var r = target / w; if (Math.abs(r - 1) < .004) break;
+        size = Math.min(mx, size * r); word.style.fontSize = size + 'px';
+        if (size >= mx) break;
+      }
+      var ww = word.getBoundingClientRect().width, wh = word.getBoundingClientRect().height;
+      var wl = Math.round((W - ww) / 2), wt = num(S.head_top, 330);
+      word.style.left = wl + 'px'; word.style.top = wt + 'px';
+
+      // ---- the script crosses the top of the word, never cleanly above it ----
+      var sc = document.getElementById('script');
+      if (!sc.classList.contains('empty')){
+        sc.style.fontSize = num(S.script_size, 150) + 'px';
+        var sw = sc.getBoundingClientRect().width, sh = sc.getBoundingClientRect().height;
+        sc.style.left = Math.round(W / 2 - sw / 2 + num(S.script_dx, -40)) + 'px';
+        sc.style.top = Math.round(wt - sh * .52 + num(S.script_dy, 0)) + 'px';
+      }
+
+      // ---- pills flank the headline at script height ----
+      var ty = num(S.tag_y, wt - 40);
+      var tL = document.getElementById('tagL'), tR = document.getElementById('tagR');
+      tL.style.left = '64px'; tL.style.top = ty + 'px';
+      tR.style.right = '64px'; tR.style.top = ty + 'px';
+
+      // ---- asterisk tagline under the word, then the lower block ----
+      var y = wt + wh * .93;
+      if (!subl.classList.contains('empty')){ subl.style.top = num(S.sub_top, y) + 'px'; }
+      var content = document.getElementById('content'), body = document.getElementById('body'), cta = document.getElementById('cta');
+      var by = num(S.body_top, 1040);
+      if (!content.classList.contains('empty')){
+        content.style.top = num(S.content_top, by - 20) + 'px';
+        by = content.offsetTop + content.offsetHeight + 30;
+      }
+      if (!body.classList.contains('empty')){ body.style.top = by + 'px'; by += body.offsetHeight + 22; }
+      if (!cta.classList.contains('empty')){ cta.style.top = num(S.cta_top, by) + 'px'; by = cta.offsetTop + cta.offsetHeight; }
+      // keep the lower block clear of the footer
+      var limit = H - 96;
+      if (by > limit){
+        var lift = by - limit;
+        [content, body, cta].forEach(function(el){ if (!el.classList.contains('empty')) el.style.top = (el.offsetTop - lift) + 'px'; });
+      }
+      document.body.dataset.ready = '1';
+    });
+  })();
+  </script>
+</body>
+</html>
